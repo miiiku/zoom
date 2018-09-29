@@ -1,0 +1,31 @@
+{
+  "name": "zoom",
+  "version": "1.0.0",
+  "description": "一个简易的图片放大查看插件",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp release",
+    "build": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miiiku/zoom.git"
+  },
+  "keywords": [
+    "zoom"
+  ],
+  "author": "miiiku",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miiiku/zoom/issues"
+  },
+  "homepage": "https://github.com/miiiku/zoom#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^7.0.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-uglify": "^3.0.1"
+  }
+}
