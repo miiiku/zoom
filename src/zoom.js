@@ -5,20 +5,27 @@
         win.zoom = factory
     }
 }(window, function(root, options = {}) {
-    var margin      = options.margin    >= 0 ? options.margin   : 15
-    var padding     = options.padding   >= 0 ? options.padding  : 15
-    var radius      = options.radius    >= 0 ? options.radius   : 5
-    var specify     = options.specify   || null
-    var filter      = options.filter    || null
-    var lazyLoad    = options.lazyLoad  || false
-    var original    = options.original  || "data-original"
+    const margin      = options.margin    >= 0 ? options.margin   : 15
+    const padding     = options.padding   >= 0 ? options.padding  : 15
+    const radius      = options.radius    >= 0 ? options.radius   : 5
+    const specify     = options.specify   || null
+    const filter      = options.filter    || null
+    const lazyLoad    = options.lazyLoad  || false
+    const original    = options.original  || "data-original"
+
+    const base64Prefix= "data:image/png;base64,"
+    const imgPrevUrl  = "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAEDElEQVRoQ9WajVEVMRDHdytQKxArUCpQKhArECoQK1AqUCoQKxAqECoQKhA6wArW+b1JbvbykndJ3t1Tdobh490l+9/970c2qDxy0bn1N7PXIrIXvvzyNyLyoKrXc+65NQAzeyUi70XkjYjwc41ciciFiFyq6l3NC6VnugGYGUp/zli6VR/AnKoq35ulGYCZHYrIlw2KQ5EHEYEyXvDQUxF5WdCS5z+2AqkGYGZs/iNQxevwJ9DhvGbzsA5gjkTkbQbM1+ARjDApVQACz38GC8ZF70WEzVC8arNUmwDmRET4euI+xxvHqpp6cQ3QJAAzw1LfkjdPUb5X8QwQshbG8B7BKAdTIDYCyCgPXQ5rqDLp+8wDYT+ARG9MgigCCLT55fa5hf9zWb0EMOxLRvIgXpT2zQII3PztOL8T5SOoDIgbVd3PgS4BIGDJFAi02Vva8pm4oCh6BlArqDsjWQMQ8jzpMgqB1FVkeuLAv2NmZCdqThSoNKrcOQBQh6yAnKkqi2wlgZJU7ntVpYWoFjPDePRXyJWqHviXRwCSrDMLdYLyUDL2SftTqTHxQkqlkRdSAN76Wc5Vm05EMsrzehMAXjCz89Aw8ut3VaU2rWQAkKTNra1fUJ7qijJNkuhGbRjSqgdAAfkQVh6hbNqtbPku5ePeZkbwPg+/v4ux5AGQsiJPhwf+B+UDjUihn4I+Q3LxAMwp+6wn789Jm9RwZkZdIhkgQ2FbAUg+vFXV2pPVsM+SyjsaDUZW1ZXuEYDvODnmcWipll0oHwzt42CVzSIAz6+m9Lkr5QMAX9RWHcIcANJyv1W22eT2pCovBoAT2nE1/xoeXAoAZ2Vc6w/ri4DYBICgjR1obxAvDsLMfKszCuJsjm3wbux7FgVhZvk0GiJ8rkK2CIhSrfKVmBFG5PG2rcTsIMxsspWYu5mbFUTC/2wz5w8Oo5a1JRZc2Z8tO6Wtvqqy9krSA40v1U0VOQcyVOnUE8scaEIg+55oay+ENVNPNAHIzKfKR8pMwzTnoR7j3HUc6v2I51pV47hnnUIBgC9q/OlxjVUyXd8sVGpNBBnq1A22HG8J6DifpEbgia4xeqfyfpy/Rp1sFvIbZSywExCZu4iNE5LW8ToeoIgsMmoMgzVGiTHPozwT8eJFR+8FR9M10BSFzIxRJor7o+yk8muFrLRRZtzNo8QIQJghdcVGKHTMojjVDdVVRBjnH9WMICc9kLQGDGbjoDV+hPL8/UJVLyusjaKsQV3IDQ/OuL6tNUo1AAeETbF8nJKlOsNXvFO6Zi2NbLD6SWt8NQNwQLAgLW4JyJQz4ufcK2PxrsTQDcABwaKAocSXLrFTMCgdafdv/tVgQ8ADpPTPHvRCk3e/ta6rzkItC+762b91gEFPa2jwZQAAAABJRU5ErkJggg=="
+    const imgNextUrl  = "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAEE0lEQVRoQ9WajVEUQRCFuyNQIxAjUCJQIhAjECIQI1AiUCIQIhAiECIQIhAjECJo67uaueqdm9md2Zu7K7rqCup2due9/p/eU3nior3xm9lbEdkLH//4WxF5UNWbnnuuTcDM3ojIRxF5JyL8XyPXInIpIleqel9zQ2nNbAJmBuivGU234oHMqaryt1maCZjZoYh8GwGOizyICC7jBQs9F5HXBZSs/9xKpJqAmbH5z+AqHsNjcIfzms3DcyBzJCLvM2S+B4ughEmpIhD8/FfQYHzoXxFhM4BXbZaiCWRORITPM3cdaxyramrFFUKTBMwMTf1I7jwF/FzgGSJkLZThLYJSDqZIjBLIgMddDmtcZdL2mQVhP4hEa0ySKBIIbvPb7XOH//fSeolg2JeM5Em8Ku2bJRB884/z+a2Aj6QyJG5VdT9HukSAgCVTILjN3qY1n4kLiqL3AGoFdWcgKwRCniddRiGQZhWZOXHg7zEzshM1JwquNKjcOQK4DlkBOVNVHlItYdN/qnpRfdPIQjNDefRXyLWqHvjlAwJJ1ml2nURj1IfjdUlkksnACikBr/2sz40ByqTdXiTOQ8PI9heqSm1ayJJAwrRZ+/GBZuY34+u1SSTYqA3LtOoJUEA+BSADlq1usCESBO/LgOWDqtKODyxAyor9/HJBK/gRS7Ah/c3cvokU+iVNLt4C5sC+mLuRJ5yxBM0ZabmZhJlRl6hPyLKwLQgkF+9UtfZkNWmgziSWSlbVBfZIwHecHPM4tHSTXiTMzMfBPp1qJOD9qzl91jDtQSIpaosOYWsEgqumKZYjJNmvSnZKIHS4BKGPr6ZstzMCBfCkVCxSLWMECNrYgXYN4l7ggwv6VmcQxNkcW62awsKe4AOBfBpNL4rI2oVsA+C9kpe1yldiqmQcOjUFV2qA3uCDgidbiS7N3CbAZ/w/28z5M+igZa2NhQ2C99geVZUp4ULSA40v1c0VOXOGbU6VOWUlVTx/oAlm8j1RsxWSgUAv8Ol0onykDCS8FeYc6heVdmok2OCWfsRzo6px3LPqQoGAL2p89bTGKoGEH2U0u1KtdsfWZaYRdYOtQIAox5XifHL2SWoOmcw4f8V1slnIb5bRwFZIZMCPTkhax+u4E0VkI6PGMFdilBjzPOCZiBdfdMx9wdH0GmjKjcyMUSbA/VF2EvxKISttlBl3s5QYgQiFpXnK4GKNWRTz12V1FRHG+Uc1qXjSApFUaBOY7cRBa7wEeL6/VNWrCm0DlGdQNHPDgzNe39YqpZqAI8KmaD5OyVLM+CvWKb1mLY1s0PpJa3w1E3BE0CAtbonIlDHidd4ro/FZiWE2AUcEjUKGEl96iZ2SAXR0u9381GAk4CFS+rHHfU1g1pquOgu1PHDba/8Dd5pFTyZ20jIAAAAASUVORK5CYII="
 
     var speed = 0.3;
-    var activeImg, maskBox, imgBox;
-    var container, fullWidth, fullHeight, maxWidth, maxHeight, unloadImages = [];
+    var maskBox, imgBox, imgCon, imgLoad, prevBtn, nextBtn, activeIndex;
+    var container, fullWidth, fullHeight, maxWidth, maxHeight, images = [], unloadImages = [];
 
     const init = () => {
         if (!root || typeof root != "string") return
+
+        prevBtn = createBtn("prev")
+        nextBtn = createBtn("next")
     
         container = document.querySelector(root)
 
@@ -26,27 +33,26 @@
             var e       = e         || window.event
             var target  = e.target  || e.srcElement
             if (target.nodeName.toLowerCase() !== "img") return
-
-            var isTrue = isAccord(target)
-
-            if (isTrue) {
-                activeImg = target
+            if (target.index >= 0) {
+                activeIndex = target.index
                 zoomIn()
             }
         })
 
-        if (lazyLoad) {
-            var imgs = Array.from(container.getElementsByTagName("img"))
-            imgs.forEach(img => {
-                if (isAccord(img) && img.getAttribute(original)) {
+        let index = 0
+        Array.from(container.getElementsByTagName("img")).forEach(img => {
+            if (isAccord(img)) {
+                img.index = index++
+                images.push(img)
+                if (lazyLoad && img.getAttribute(original)) {
                     unloadImages.push(img)
                 }
-            })
-
-            if (unloadImages.length > 0) {
-                window.addEventListener('scroll', scrollEvent)
-                scrollEvent()
             }
+        })
+
+        if (lazyLoad && unloadImages.length > 0) {
+            window.addEventListener('scroll', scrollEvent)
+            scrollEvent()
         }
 
         window.addEventListener('resize', resizeEvent)
@@ -54,6 +60,17 @@
     }
 
     const px = n => n + "px"
+
+    const getIndex = (key, value, arrs) => {
+        if (arrs.length < 1) return -1
+
+        for (let i = 0; i < arrs.length; i++) {
+            if (arrs[i][key] === value)
+            return i
+        }
+
+        return -1
+    }
 
     const isAccord = (img) => {
 
@@ -85,23 +102,25 @@
         return bound.top <= clientHeight
     }
 
-    const loadImage = (imgItem, index) => {
+    const loadImage = (imgItem, index, callback) => {
+        callback && (imgItem.onload = callback)
         imgItem.src = imgItem.getAttribute(original)
         unloadImages.splice(index, 1)
     }
 
-    const zoomIn = () => {
-        var bound       = activeImg.getBoundingClientRect()
-        var src         = activeImg.src
-        var width       = activeImg.width
-        var height      = activeImg.height
-        var imgWidth    = activeImg.naturalWidth
-        var imgHeight   = activeImg.naturalHeight
+    const zoomIn = (isSwitch) => {
+        const image     = images[activeIndex]
+        var bound       = image.getBoundingClientRect()
+        var src         = image.src
+        var width       = image.width
+        var height      = image.height
+        var imgWidth    = image.naturalWidth
+        var imgHeight   = image.naturalHeight
 
         var wRatio      = (maxWidth / maxHeight).toFixed(2)
         var iRatio      = (imgWidth / imgHeight).toFixed(2)
 
-        var ratioWidth, ratioHeight;
+        var ratioWidth, ratioHeight
 
         if (wRatio > iRatio) {
             var rt      = (maxHeight / imgHeight).toFixed(2)
@@ -119,7 +138,8 @@
         var x = (fullWidth - ratioWidth) / 2 - padding
         var y = (fullHeight - ratioHeight) / 2 - padding
 
-        if (maskBox) {
+        if (isSwitch) {
+            zoomShow(bound.left - padding, bound.top - padding, width, height, src)
             zoomTransform(x, y, ratioWidth, ratioHeight, true)
         } else {
             createZoom(bound.left - padding, bound.top - padding, width, height, src)
@@ -130,22 +150,25 @@
     }
 
     const zoomOut = () => {
-        var bound       = activeImg.getBoundingClientRect()
-        var imgWidth    = activeImg.width
-        var imgHeight   = activeImg.height
+        const image     = images[activeIndex]
+        var bound       = image.getBoundingClientRect()
+        var imgWidth    = image.width
+        var imgHeight   = image.height
 
         // transform里面设置了4个属性，会触发4次，第一次触发已经销毁，后面三次报错，设置为只执行一次
         imgBox.addEventListener("transitionend", function() {
             maskBox.remove()
-            activeImg = null
             maskBox = null
             imgBox = null
+            activeIndex = null
         }, { once: true })
+
+        document.body.removeEventListener("keyup", keyUpEvent)
 
         zoomTransform(bound.left - padding, bound.top - padding, imgWidth, imgHeight)
     }
 
-    const createLoader = (x, y) => {
+    const createLoader = () => {
         var loadBox = document.createElement("div")
         var loaderSVG = `
             <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve">
@@ -165,24 +188,45 @@
                 </path>
             </svg>
         `
-
         loadBox.style = `
-            position: fixed;
-            top: ${y}px;
-            left: ${x}px;
-            padding: 20px;
-            background-color: #FFF;
-            border-radius: 10px;
-            overflow: hidden;
-            box-sizing: content-box;
-            transition: all ${speed}s ease;
-            -o-transition: all ${speed}s ease;
-            -ms-transition: all ${speed}s ease;
-            -moz-transition: all ${speed}s ease;
-            -webkit-transition: all ${speed}s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            width: 40px;
+            height: 40px;
         `
         loadBox.innerHTML = loaderSVG
+        imgLoad = loadBox
         return loadBox
+    }
+
+    const createBtn = (type) => {
+        const btn = document.createElement("img")
+        btn.src = base64Prefix + (type === "next" ? imgNextUrl : imgPrevUrl)
+        btn.id = type === "next" ? "next-btn" : "prev-btn"
+        btn.style = `
+            position: absolute;
+            display: block;
+            width: 30px;
+            height: 30px;
+            ${ type === "next" ? "right: 30px;" : "left: 30px;" }
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
+            transition: opacity 0.3s ease;
+        `
+        btn.addEventListener("click", function (e) {
+            type === "next" ? next() : prev()
+        })
+
+        return btn
     }
 
     const createZoom = (x, y, w, h, src) => {
@@ -219,21 +263,96 @@
             -moz-transition: all ${speed}s ease;
             -webkit-transition: all ${speed}s ease;
         `
+        
+        imgBox.addEventListener("click", function(e) {
+            e.stopPropagation()
+        })
 
-        var imgCon = document.createElement("img")
-        imgCon.src = src
+        imgBox.addEventListener("mouseover", function(e) {
+            let prev = imgBox.querySelector("#prev-btn")
+            let next = imgBox.querySelector("#next-btn")
+            prev && (prev.style.opacity = 1)
+            next && (next.style.opacity = 1)
+        })
+
+        imgBox.addEventListener("mouseout", function(e) {
+            let prev = imgBox.querySelector("#prev-btn")
+            let next = imgBox.querySelector("#next-btn")
+            prev && (prev.style.opacity = 0)
+            next && (next.style.opacity = 0)
+        })
+
+        imgCon = document.createElement("img")
         imgCon.style = `
             display: block;
             width: 100%;
         `
+        imgCon.src = src
+
+        if (activeIndex !== 0) {
+            imgBox.appendChild(prevBtn)
+        }
+
+        if (activeIndex !== images.length - 1) {
+            imgBox.appendChild(nextBtn)
+        }
 
         imgBox.appendChild(imgCon)
         maskBox.appendChild(imgBox)
         document.body.appendChild(maskBox)
 
+        document.body.addEventListener("keyup", keyUpEvent)
+
         maskBox.addEventListener("click", function() {
             zoomOut()
         }, { once: true })
+    }
+
+    const zoomShow = (x, y, w, h, src) => {
+        imgBox.style.top = px(y)
+        imgBox.style.left = px(x)
+        imgBox.style.width = px(w)
+        imgBox.style.height = px(h)
+        imgCon.src = src
+        imgCon.onload = function () {
+            imgLoad && imgLoad.remove()
+        }
+
+        if (activeIndex === 0) {
+            if (imgBox.querySelector("#prev-btn")) prevBtn.remove()
+        } else {
+            if (!imgBox.querySelector("#prev-btn")) imgBox.appendChild(prevBtn)
+        }
+
+        if (activeIndex >= images.length - 1) {
+            if (imgBox.querySelector("#next-btn")) nextBtn.remove()
+        } else {
+            if (!imgBox.querySelector("#next-btn")) imgBox.appendChild(nextBtn)
+        }
+    }
+
+    const prev = () => {
+        if (activeIndex == 0) return
+        let image = images[--activeIndex]
+        switchImage(image)
+    }
+
+    const next = () => {
+        if (activeIndex >= images.length - 1) return
+        let image = images[++activeIndex]
+        switchImage(image)
+    }
+
+    const switchImage = (image) => {
+        if (!image.src) {
+            imgCon.src = ""
+            imgBox.appendChild(createLoader())
+            loadImage(image, getIndex("id", image.id, unloadImages), function () {
+                zoomIn(true)
+            })
+        } else {
+            zoomIn(true)
+        }
     }
 
     const zoomTransform = (x, y, w, h, isOpen) => {
@@ -244,13 +363,18 @@
         imgBox.style.height = px(h)
     }
 
+    const keyUpEvent = (e) => {
+        if (e.keyCode === 37) prev()
+        if (e.keyCode === 39) next()
+    }
+
     const resizeEvent = () => {
         fullWidth   = window.innerWidth
         fullHeight  = window.innerHeight
         maxWidth    = fullWidth - margin * 2 - padding * 2
         maxHeight   = fullHeight - margin * 2 - padding * 2
 
-        activeImg && zoomIn()
+        activeIndex && zoomIn(true)
     }
 
     const scrollEvent = () => {
