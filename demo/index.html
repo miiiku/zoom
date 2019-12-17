@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,50 @@
     <title>zoom demo</title>
     <style>
         @media only screen and (min-width:767px) {
-            html::-webkit-scrollbar-track-piece{background:#eee}
-            html::-webkit-scrollbar{width:6px;height:6px}
-            html::-webkit-scrollbar-thumb{height:40px;border-radius:4px;background-color:#A5A5A5}
-            html::-webkit-scrollbar-thumb:hover{background-color:#bbb}
+            html::-webkit-scrollbar-track-piece {
+                background: #eee
+            }
+
+            html::-webkit-scrollbar {
+                width: 6px;
+                height: 6px
+            }
+
+            html::-webkit-scrollbar-thumb {
+                height: 40px;
+                border-radius: 4px;
+                background-color: #A5A5A5
+            }
+
+            html::-webkit-scrollbar-thumb:hover {
+                background-color: #bbb
+            }
         }
-        * { margin: 0; padding: 0; box-sizing: content-box; }
-        .root { width: 680px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-around; }
-        .root > img { display: block; width: 200px; height: 200px; object-fit: cover; margin-top: 10px; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: content-box;
+        }
+
+        .root {
+            width: 680px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .root>img {
+            display: block;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            margin-top: 10px;
+        }
     </style>
 </head>
+
 <body>
     <div class="root">
         <img src="https://qiniu.miiiku.xyz/attach/5b7d2608738695267b4589ce/IMG_2789.jpg">
@@ -58,11 +93,14 @@
     <script src="../src/zoom.min.js"></script>
     <script>
         window.onload = function () {
-            zoom(".root", {
+            let z = zoom(".root", {
                 lazyLoad: true,
                 filter: "data-type",
-            })
+            });
+
+            // z.destroy()
         }
     </script>
 </body>
+
 </html>
