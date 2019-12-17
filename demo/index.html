@@ -13,14 +13,16 @@
             html::-webkit-scrollbar-thumb:hover{background-color:#bbb}
         }
         * { margin: 0; padding: 0; box-sizing: content-box; }
-        .root { width: 600px; margin: auto; }
-        .root > img { display: block; width: 100%; margin-top: 10px; }
+        .root { width: 680px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .root > img { display: block; width: 200px; height: 200px; object-fit: cover; margin-top: 10px; }
     </style>
 </head>
 <body>
     <div class="root">
         <img src="https://qiniu.miiiku.xyz/attach/5b7d2608738695267b4589ce/IMG_2789.jpg">
         <img src="https://qiniu.miiiku.xyz/attach/5b7d2608738695267b4589ce/IMG_2702.jpg">
+        <img src="https://qiniu.miiiku.xyz/src/images/link.jpg">
+        <img src="https://qiniu.miiiku.xyz/src/images/logo.png">
         <img data-type src="https://qiniu.miiiku.xyz/attach/5b7d2608738695267b4589ce/IMG_2701.jpg">
         <img data-original="https://qiniu.miiiku.xyz/attach/5b7d2608738695267b4589ce/IMG_2932.jpg">
         <img data-original="https://qiniu.miiiku.xyz/attach/5b7d2608738695267b4589ce/IMG_2670.jpg">
@@ -52,7 +54,8 @@
         <img data-original="https://qiniu.miiiku.xyz/attach/5b7d2608738695267b4589ce/IMG_2440.jpg">
         <img data-original="https://qiniu.miiiku.xyz/attach/5b7d2608738695267b4589ce/IMG_2443.jpg">
     </div>
-    <script src="../dist/zoom.min.js"></script>
+    <!-- <script src="../dist/zoom.min.js"></script> -->
+    <script src="../src/zoom.min.js"></script>
     <script>
         window.onload = function () {
             zoom(".root", {
