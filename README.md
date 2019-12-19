@@ -28,28 +28,38 @@
 
 ``` js
 window.onload = funciton () {
-    zoom("#root", {
+    // 创建
+    let z = zoom("#root", {
         lazyLoad: true,
-    })
+    });
+
+    // 销毁
+    z.destroy();
+    z = null;
 }
 ```
 
 # options
 
 ## **margin:**\<Number\>
-默认值 15
+默认值 10
 
 查看大图下，图片容器距离屏幕的外边距
 
 ## **padding:**\<Number\>
-默认值 15
+默认值 10
 
 查看大图下，图片容器内容区域的内边距
 
 ## **radius:**\<Number\>
-默认值 5
+默认值 4
 
 查看大图下，图片容器的圆角值
+
+## **zIndex**\<Number\>
+默认值 999
+
+模态框的z-index，越大层级越高
 
 ## **specify:**\<String\>
 默认值 null
