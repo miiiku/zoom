@@ -556,6 +556,16 @@
       loadImage(image, i);
     }
 
+    if (domImgBox.querySelector(".zoom-loading")) {
+      domImgBox.querySelector(".zoom-loading").remove();
+    }
+    if (domImgBox.querySelector(".zoom-error")) {
+      domImgBox.querySelector(".zoom-error").remove();
+    }
+    if (domImgBox.querySelector(".zoom-img")) {
+      domImgBox.querySelector(".zoom-img").remove();
+    }
+
     domImgBox.appendChild(domImgLoading);
 
     let img = document.createElement("img");
@@ -596,16 +606,6 @@
    */
   const showImage = (position) => {
     let { x, y, w, h  } = position;
-
-    if (domImgBox.querySelector(".zoom-loading")) {
-      domImgBox.querySelector(".zoom-loading").remove();
-    }
-    if (domImgBox.querySelector(".zoom-error")) {
-      domImgBox.querySelector(".zoom-error").remove();
-    }
-    if (domImgBox.querySelector(".zoom-img")) {
-      domImgBox.querySelector(".zoom-img").remove();
-    }
 
     domMaskBox.style.display = "block";
 
