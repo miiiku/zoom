@@ -113,6 +113,7 @@
     if (isClose) {
       activeIndex = null;
       domMaskBox.style.display = "none";
+      document.body.style.overflow = "initial";
     }
   }
 
@@ -314,6 +315,20 @@
     var bound = img.getBoundingClientRect();
     return bound.top <= fullHeight && bound.top >= 0 || bound.bottom >= 0 && bound.bottom <= fullHeight;
   }
+
+  /**
+   * 获取显示图片时默认显示的位置大小
+   *
+   * @returns 默认显示的位置大小
+   */
+  const getShowDefaultPosition = () => {
+    return {
+      x: fullWidth / 4,
+      y: fullHeight / 4,
+      w: fullWidth / 2,
+      h: fullHeight / 2,
+    }
+  }
   
   /**
    * 获取图片显示时的起始位置信息
@@ -413,7 +428,6 @@
     if (!isTransitionEnd) return console.log("阻止关闭");
     isClose = true;
     isTransitionEnd = false;
-    document.body.style.overflow = "initial";
     transformZoom(getHideEndPosition());
   }
 
@@ -576,7 +590,10 @@
     domImgBox.style.width = px(w);
     domImgBox.style.height = px(h);
 
-    fillImage();
+    setTimeout(() => {
+      transformZoom(getShowDefaultPosition());
+      setTimeout(fillImage, 0);
+    }, 0);
   }
 
   /**
@@ -590,6 +607,7 @@
    */
   const transformZoom = (position) => {
     let { x, y, w, h  } = position;
+    // 在transformZoom(getShowDefaultPosition())后立马执行transformZoom(getShowEndPosition())不会添加两次transitionend事件，因为事件都是固定的一个eventTransitionend
     domImgBox.addEventListener("transitionend", eventTransitionend);
     if (isClose) {
       domMaskBox.style.backgroundColor = "rgba(0, 0, 0, 0.2)";
