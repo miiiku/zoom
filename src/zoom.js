@@ -216,10 +216,6 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transform: translate3d(0,0,0);
-        -o-transform: translate3d(0,0,0);
-        -moz-transform: translate3d(0,0,0);
-        -webkit-transform: translate3d(0,0,0);
       }
       .zoom-btn {
         position: absolute;
