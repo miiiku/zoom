@@ -20,9 +20,11 @@
 
   const speed = 0.4;
 
-  var domMaskBox, domImgBox, domImgLoading, domImgError, domPrevBtn, domNextBtn, domStyle;
-  var activeIndex = null, isTransitionEnd = true, isClose = true;
-  var container, fullWidth = window.innerWidth, fullHeight = window.innerHeight, maxWidth, maxHeight, images = [], unloads = [];
+  let eventScroll, eventResize;
+
+  let domMaskBox, domImgBox, domImgLoading, domImgError, domPrevBtn, domNextBtn, domStyle;
+  let activeIndex = null, isTransitionEnd = true, isClose = true;
+  let container, fullWidth = window.innerWidth, fullHeight = window.innerHeight, maxWidth, maxHeight, images = [], unloads = [];
 
   /**
    * 防抖
@@ -39,23 +41,29 @@
     }
   }
 
-  // 防抖后的页面滚动事件
-  const eventScroll = debounce(() => {
+  /**
+   * 页面滚动执行方法
+   *
+   * @returns
+   */
+  const scrollFunc = () => {
     if (unloads.length < 1) return window.removeEventListener("scroll", eventScroll);
     for (let i = unloads.length; i--;) {
       getBound(unloads[i]) && loadImage(unloads[i], i);
     }
-  }, 400);
+  }
 
-  // 防抖后的页面窗口大小改变事件
-  const eventResize = debounce(() => {
+  /**
+   * 页面窗口大小改变执行方法
+   *
+   */
+  const resizeFunc = () => {
     fullWidth = window.innerWidth;
     fullHeight = window.innerHeight;
     maxWidth = fullWidth - margin * 2 - padding * 2;
     maxHeight = fullHeight - margin * 2 - padding * 2;
-
     activeIndex && transformZoom(getShowEndPosition());
-  }, 800);
+  }
 
   /**
    * 点击查看图片
@@ -143,13 +151,16 @@
       }
     });
 
+    eventScroll = debounce(scrollFunc, 400);
+    eventResize = debounce(resizeFunc, 800);
+
     window.addEventListener("resize", eventResize);
     window.addEventListener("keyup", eventKeyUp);
-    eventResize();
+    resizeFunc();
 
     if (lazyLoad && unloads.length > 0) {
       window.addEventListener("scroll", eventScroll);
-      eventScroll();
+      scrollFunc();
     }
   }
 
@@ -172,6 +183,10 @@
         -ms-transition: all ${speed}s ease;
         -moz-transition: all ${speed}s ease;
         -webkit-transition: all ${speed}s ease;
+        transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -webkit-transform: translate3d(0,0,0);
       }
       .zoom-box {
         position: fixed;
@@ -188,6 +203,10 @@
         -ms-transition: all ${speed}s ease;
         -moz-transition: all ${speed}s ease;
         -webkit-transition: all ${speed}s ease;
+        transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -webkit-transform: translate3d(0,0,0);
       }
       .zoom-box:hover .zoom-btn {
         opacity: 1;
@@ -197,6 +216,10 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -webkit-transform: translate3d(0,0,0);
       }
       .zoom-btn {
         position: absolute;
@@ -533,16 +556,6 @@
       loadImage(image, i);
     }
 
-    if (domImgBox.querySelector(".zoom-loading")) {
-      domImgBox.querySelector(".zoom-loading").remove();
-    }
-    if (domImgBox.querySelector(".zoom-error")) {
-      domImgBox.querySelector(".zoom-error").remove();
-    }
-    if (domImgBox.querySelector(".zoom-img")) {
-      domImgBox.querySelector(".zoom-img").remove();
-    }
-
     domImgBox.appendChild(domImgLoading);
 
     let img = document.createElement("img");
@@ -583,6 +596,17 @@
    */
   const showImage = (position) => {
     let { x, y, w, h  } = position;
+
+    if (domImgBox.querySelector(".zoom-loading")) {
+      domImgBox.querySelector(".zoom-loading").remove();
+    }
+    if (domImgBox.querySelector(".zoom-error")) {
+      domImgBox.querySelector(".zoom-error").remove();
+    }
+    if (domImgBox.querySelector(".zoom-img")) {
+      domImgBox.querySelector(".zoom-img").remove();
+    }
+
     domMaskBox.style.display = "block";
 
     domImgBox.style.top = px(y);
