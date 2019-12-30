@@ -551,17 +551,8 @@
       let i = findIndexs(unloads, "index", image.index);
       loadImage(image, i);
     }
-
-    if (domImgBox.querySelector(".zoom-loading")) {
-      domImgBox.querySelector(".zoom-loading").remove();
-    }
-    if (domImgBox.querySelector(".zoom-error")) {
-      domImgBox.querySelector(".zoom-error").remove();
-    }
-    if (domImgBox.querySelector(".zoom-img")) {
-      domImgBox.querySelector(".zoom-img").remove();
-    }
-
+    
+    domImgBox.innerHTML = "";
     domImgBox.appendChild(domImgLoading);
 
     let img = document.createElement("img");
