@@ -603,6 +603,15 @@
   const showImage = (position) => {
     let { x, y, w, h  } = position;
 
+    let src = images[activeIndex].src;
+    let img = document.createElement("img");
+    img.src = src;
+    img.className = "zoom-img";
+    
+    domImgBox.innerHTML = "";
+
+    domImgBox.appendChild(img);
+
     domMaskBox.style.display = "block";
 
     domImgBox.style.top = px(y);
@@ -613,7 +622,7 @@
     setTimeout(() => {
       transformZoom(getShowDefaultPosition());
       setTimeout(fillImage, 0);
-    }, 0);
+    }, 200);
   }
 
   /**
